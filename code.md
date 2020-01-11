@@ -1,25 +1,24 @@
----
-title: "Montecarlo Pricing for Exotic Options"
-output: rmarkdown::github_document
----
+Montecarlo Pricing for Exotic Options
+================
 
-The aim of the following code is to price a call option in which the underlying asset follows a Constant Elasticity Variance Process (CEV). Montecarlo simulations are made to simulate the expected and theoretical value of the option. Some conditions that I propose must be cumplimented: 
+The aim of the following code is to price a call option in which the underlying asset follows a Constant Elasticity Variance Process (CEV). Montecarlo simulations are made to simulate the expected and theoretical value of the option. Some conditions that I propose must be cumplimented:
 
- - There are 3 stages of time for the price of the underlying within the life of the option that must be within an interval, defined by alpha (lower bound) and beta (upper bound). 
- - If this condition is fulfilled, the payoff activates for that stage of time, otherwise not. The total payoff will be the expected mean of the payoffs of each stage of time.
+-   There are 3 stages of time for the price of the underlying within the life of the option that must be within an interval, defined by alpha (lower bound) and beta (upper bound).
+-   If this condition is fulfilled, the payoff activates for that stage of time, otherwise not. The total payoff will be the expected mean of the payoffs of each stage of time.
 
-The CEV (Constant Elasticity Variance) is a diffusion model, in this case for a stock price $S$, where r is the risk free rate, $dz$ is a wiener process, $\sigma$ is the volatility parameter and $\gamma$ is a positive constant. It takes the form 
+The CEV (Constant Elasticity Variance) is a diffusion model, in this case for a stock price *S*, where r is the risk free rate, *d**z* is a wiener process, *σ* is the volatility parameter and *γ* is a positive constant. It takes the form
 
-\
-                <center>$dSt = \mu Sdt + \sigma S^\gamma dz$</center>
-\
-
+<center>
+*d**S**t* = *μ**S**d**t* + *σ**S*<sup>*γ*</sup>*d**z*
+</center>
 Note that if the gamma is equal to 1, it will take the same form that as a geometric Brownian Motion. Moreover, if the gamma is lower than 1, the volatility increases as the stock price decreases, creating a probability distribution with a heavy left tail. This is due to the fact that when the volatility increases, it makes the stock more likely to go down. In the other hand if gamma is bigger than 1, the the volatility increases as the stock price increases. The CEV model is useful for valuating exotic equity options since the parameters of the model can be chosen to fit the prices of plain vanilla options as closely as possible by minimizing the sum of the squared differences between model prices and market prices.
 
 As we see, we write the model in general form, so we set the values, but recall that this values are set to simulate. A final user should provide the values, therefore the given ones in here are arbitrary: the length of the interval for our data is 100. The starting point is 1. Then the volatility is 1% and mu is 0. We have the boundaries for beta=1.5 and alpha=0.5 as a basis (Since aftwerwards we will perform the sensitive analysis). However we could change this values as we said as they are arbitrary and the final user could use it as he/she wants, for instance to model a in-the-money , at-the-money or an out-the-money option.
 
-#Process
-```{r, message=FALSE, warning=FALSE}
+Process
+=======
+
+``` r
 library(ggplot2)
 #Clean all
 rm(list=ls())
@@ -89,9 +88,10 @@ simulate_cev = function (N,T,start,gamma,vol,mu,alpha1,beta1,strike) {
   }
 ```
 
-# MonteCarlo Speed of Convergence
+MonteCarlo Speed of Convergence
+===============================
 
-```{r, message=FALSE, warning=FALSE}
+``` r
 #Reference Simulation
 benchmark=simulate_cev(N=10000,T=100,start=1,gamma=1,vol=0.01,mu=0,alpha1=0.5,beta1=1.5,strike=1)
 
@@ -118,7 +118,7 @@ minP <- min(p1 - err)
 maxP <- max(p1 + err)
 ```
 
-```{r, message=F, warning=F}
+``` r
 plot(m, p1, type = "n", ylim = c(minP, maxP), axes = F, ylab = "MC price", xlab =
        "Montecarlo replications")
 lines(m, p1 + err, col = "blue")
@@ -131,8 +131,12 @@ abline(h = benchmark$Expected.Value, lty = 2, col = "red", lwd = 0.5)
 title("Montecarlo speed of convergence")
 ```
 
-#MonteCarlo Empirical Price
-```{r, message=FALSE, warning=FALSE}
+![](code_files/figure-markdown_github/unnamed-chunk-3-1.png)
+
+MonteCarlo Empirical Price
+==========================
+
+``` r
 m <- 1000
 nM <- length(m)
 repl <- 100
@@ -147,18 +151,35 @@ price=mean(tmp)
 lower.emp=quantile(mat[,1],0.025)
 upper.emp=quantile(mat[,1],0.975)
 print(price)
+```
+
+    ## [1] 0.04004958
+
+``` r
 print(lower.emp)
+```
+
+    ##       2.5% 
+    ## 0.03626737
+
+``` r
 print(upper.emp)
 ```
+
+    ##      97.5% 
+    ## 0.04494572
+
 This is the price for the values set by the final user.
 
-
-#Sensitivity Analaysis
+Sensitivity Analaysis
+=====================
 
 The sensitivity allows us to know if we did things write. In other words, we check how sensitive is our price when one of the parameters changes, holding the other parameters constant.
 
-#Sensitivity on strike
-```{r, message=FALSE, warning=FALSE}
+Sensitivity on strike
+=====================
+
+``` r
 strike=seq(from = 0, to = 2, by = 0.2)
 sensi_strike=matrix(NA,length(strike),1)
 
@@ -172,8 +193,12 @@ ggplot() + geom_point(aes(x=strike, y=sensi_strike)) +
   xlab("Strike") + ylab("Price") + ggtitle("Strike Sensitivity") + theme_bw()
 ```
 
-#Sensitivity on drift
-```{r, message=FALSE, warning=FALSE}
+![](code_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+Sensitivity on drift
+====================
+
+``` r
 mu=seq(from = 0, to = 0.01, by = 0.001)
 sensi_mu=matrix(NA,length(mu),1)
 
@@ -187,8 +212,12 @@ ggplot() + geom_point(aes(x=mu, y=sensi_mu)) +
   xlab("Daily Drift") + ylab("Price") + ggtitle("Drift Sensitivity") + theme_bw()
 ```
 
-#Sensitivity on Time
-```{r, message=FALSE, warning=FALSE}
+![](code_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
+Sensitivity on Time
+===================
+
+``` r
 #Reduced the gap between alpha1 and beta1 to better see the effect
 time=seq(from = 20, to = 400, by = 20)
 sensi_time=matrix(NA,length(time),1)
@@ -203,9 +232,12 @@ ggplot() + geom_point(aes(x=time, y=sensi_time)) +
   xlab("Time horizon") + ylab("Price") + ggtitle("Time Sensitivity") + theme_bw()
 ```
 
+![](code_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
-#Sensitivity on volatility
-```{r, message=FALSE, warning=FALSE}
+Sensitivity on volatility
+=========================
+
+``` r
 volatility=seq(from = 0.005, to = 0.1, by = 0.005)
 sensi_volatility=matrix(NA,length(volatility),1)
 
@@ -219,8 +251,12 @@ ggplot() + geom_point(aes(x=volatility, y=sensi_volatility)) +
   xlab("Volatility") + ylab("Price") + ggtitle("Volatility Sensitivity") + theme_bw()
 ```
 
-#Sensitivity on gamma
-```{r, message=FALSE, warning=FALSE}
+![](code_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
+Sensitivity on gamma
+====================
+
+``` r
 gamma=seq(from = 0.1, to = 2, by = 0.05)
 sensi_gamma=matrix(NA,length(gamma),1)
 
@@ -231,13 +267,14 @@ for (i in 1:length(gamma)) {
 }
 ggplot() + geom_point(aes(x=gamma, y=sensi_gamma)) +
   xlab("Leverage Gamma Factor") + ylab("Price") + ggtitle("Gamma Leverage Sensitivity") + theme_bw()
-
 ```
 
+![](code_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
-#Sensitivity on alpha1
+Sensitivity on alpha1
+=====================
 
-```{r, message=FALSE, warning=FALSE}
+``` r
 alpha1=seq(from = 0.7, to = 1.2, by = 0.025)
 sensi_alpha1=matrix(NA,length(alpha1),1)
 
@@ -250,9 +287,12 @@ ggplot() + geom_point(aes(x=alpha1, y=sensi_alpha1)) +
   xlab("Lower Bound Value") + ylab("Price") + ggtitle("Lower Bound Sensitivity (Upper Bound = 1.5)") + theme_bw()
 ```
 
+![](code_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
-#Sensitivity on beta1
-```{r, message=FALSE, warning=FALSE}
+Sensitivity on beta1
+====================
+
+``` r
 beta1=seq(from = 0.7, to = 1.2, by = 0.025)
 sensi_beta1=matrix(NA,length(beta1),1)
 
@@ -265,3 +305,4 @@ ggplot() + geom_point(aes(x=beta1, y=sensi_beta1)) +
   xlab("Upper Bound Value") + ylab("Price") + ggtitle("Upper Bound Sensitivity (Lower Bound = 0.5)") + theme_bw()
 ```
 
+![](code_files/figure-markdown_github/unnamed-chunk-11-1.png)
