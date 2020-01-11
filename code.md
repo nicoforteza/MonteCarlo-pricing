@@ -8,9 +8,8 @@ The aim of the following code is to price a call option in which the underlying 
 
 The CEV (Constant Elasticity Variance) is a diffusion model, in this case for a stock price *S*, where r is the risk free rate, *d**z* is a wiener process, *σ* is the volatility parameter and *γ* is a positive constant. It takes the form
 
-<center>
-*d**S**t* = *μ**S**d**t* + *σ**S*<sup>*γ*</sup>*d**z*
-</center>
+*d**S**t* = *μ**S**d**t* + *σ**S*<sup>*γ*</sup> + *d**z*
+
 Note that if the gamma is equal to 1, it will take the same form that as a geometric Brownian Motion. Moreover, if the gamma is lower than 1, the volatility increases as the stock price decreases, creating a probability distribution with a heavy left tail. This is due to the fact that when the volatility increases, it makes the stock more likely to go down. In the other hand if gamma is bigger than 1, the the volatility increases as the stock price increases. The CEV model is useful for valuating exotic equity options since the parameters of the model can be chosen to fit the prices of plain vanilla options as closely as possible by minimizing the sum of the squared differences between model prices and market prices.
 
 As we see, we write the model in general form, so we set the values, but recall that this values are set to simulate. A final user should provide the values, therefore the given ones in here are arbitrary: the length of the interval for our data is 100. The starting point is 1. Then the volatility is 1% and mu is 0. We have the boundaries for beta=1.5 and alpha=0.5 as a basis (Since aftwerwards we will perform the sensitive analysis). However we could change this values as we said as they are arbitrary and the final user could use it as he/she wants, for instance to model a in-the-money , at-the-money or an out-the-money option.
@@ -153,21 +152,21 @@ upper.emp=quantile(mat[,1],0.975)
 print(price)
 ```
 
-    ## [1] 0.04004958
+    ## [1] 0.04004851
 
 ``` r
 print(lower.emp)
 ```
 
     ##       2.5% 
-    ## 0.03626737
+    ## 0.03713037
 
 ``` r
 print(upper.emp)
 ```
 
     ##      97.5% 
-    ## 0.04494572
+    ## 0.04355607
 
 This is the price for the values set by the final user.
 

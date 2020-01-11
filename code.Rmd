@@ -11,7 +11,8 @@ The aim of the following code is to price a call option in which the underlying 
 The CEV (Constant Elasticity Variance) is a diffusion model, in this case for a stock price $S$, where r is the risk free rate, $dz$ is a wiener process, $\sigma$ is the volatility parameter and $\gamma$ is a positive constant. It takes the form 
 
 \
-                <center>$dSt = \mu Sdt + \sigma S^\gamma dz$</center>
+\[dSt = \mu Sdt + \sigma S^\gamma +dz\]
+
 \
 
 Note that if the gamma is equal to 1, it will take the same form that as a geometric Brownian Motion. Moreover, if the gamma is lower than 1, the volatility increases as the stock price decreases, creating a probability distribution with a heavy left tail. This is due to the fact that when the volatility increases, it makes the stock more likely to go down. In the other hand if gamma is bigger than 1, the the volatility increases as the stock price increases. The CEV model is useful for valuating exotic equity options since the parameters of the model can be chosen to fit the prices of plain vanilla options as closely as possible by minimizing the sum of the squared differences between model prices and market prices.
