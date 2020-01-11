@@ -1,4 +1,4 @@
-# Montecarlo Pricing for Exotic Options
+## Montecarlo Pricing for Exotic Options
 The aim of the following exercise is to price a **call option** in which the underlying asset follows a Constant Elasticity Variance Process (CEV). A CEV process can be written as follows:
 
 <center>
