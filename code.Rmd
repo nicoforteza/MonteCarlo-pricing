@@ -1,6 +1,6 @@
 ---
 title: "Montecarlo Pricing for Exotic Options"
-output: html_notebook
+output: rmarkdown::github_document
 ---
 
 The aim of the following code is to price a call option in which the underlying asset follows a Constant Elasticity Variance Process (CEV). Montecarlo simulations are made to simulate the expected and theoretical value of the option. Some conditions that I propose must be cumplimented: 
