@@ -1,7 +1,8 @@
 # Montecarlo Pricing for Exotic Options
 The aim of the following exercise is to price a **call option** in which the underlying asset follows a Constant Elasticity Variance Process (CEV). A CEV process can be written as follows:
 \
-                <center>**$dSt = \mu Sdt + \sigma S^\gamma dz$**</center>
+<a href="https://www.codecogs.com/eqnedit.php?latex=\LARGE&space;dSt&space;=&space;\mu&space;Sdt&space;&plus;&space;\sigma&space;S^\gamma&space;&plus;dz" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\LARGE&space;dSt&space;=&space;\mu&space;Sdt&space;&plus;&space;\sigma&space;S^\gamma&space;&plus;dz" title="\LARGE dSt = \mu Sdt + \sigma S^\gamma +dz" /></a>
+<center>**$dSt = \mu Sdt + \sigma S^\gamma dz$**</center>
 \
 where $dz$ is a _wiener_ process, $\sigma$ is the volatility parameter and $\gamma$ is a positive constant.
 Montecarlo simulations are made to simulate the expected and theoretical value of the option. Some conditions that I propose must be cumplimented: 
