@@ -3,7 +3,7 @@ The aim of the following exercise is to price a **call option** in which the und
 
 $dS_t=\mu S_t dt + \sigma {S_t}^{\gamma} dW_t$   
 
-where <a href="https://www.codecogs.com/eqnedit.php?latex=dz" target="_blank"><img src="https://latex.codecogs.com/gif.latex?dz"/></a> is a _wiener_ process, <a href="https://www.codecogs.com/eqnedit.php?latex=\sigma" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sigma"/></a> is the volatility parameter and <a href="https://www.codecogs.com/eqnedit.php?latex=\gamma" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\gamma"/></a> is a positive constant.
+where $dW_t$ is a _wiener_ process, $\sigma$ is the volatility parameter and $\gamma$ is a positive constant.
 Montecarlo simulations are made to simulate the expected and theoretical value of the option. Some conditions that I propose must be cumplimented: 
 
 - There are 3 stages of time for the price of the underlying within the life of the option that must be within an interval, defined by alpha (lower bound) and beta (upper bound). 
